@@ -39,9 +39,7 @@ Euro Tracker is a minimal Android app that shows the current Euro-to-BRL exchang
 
 ## 🔒 License
 
-This project is licensed under the *Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)* license.
-
-> You are free to share and adapt the code, but not for commercial use. Any derivative work must give appropriate credit and remain non-commercial.
+This project is licensed under the *GNU General Public License v3.0* license.
 
 📄 See the full license in LICENSE.
 
