@@ -5,9 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,14 +26,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
+import java.time.Duration
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
+    private fun getDelayUntilNoon(): Long {
+        val now = LocalDateTime.now()
+        val noonToday = now
+            .withHour(12)
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+
+        val targetTime = if (now.isBefore(noonToday)) noonToday else noonToday.plusDays(1)
+        return Duration.between(now, targetTime).toMillis()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+         val dailyRequest = PeriodicWorkRequestBuilder<EuroPriceWorker>(1, TimeUnit.DAYS)
+             .setInitialDelay(getDelayUntilNoon(), TimeUnit.DAYS)
+             .build()
+
+         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+             "EuroPriceWorker",
+             androidx.work.ExistingPeriodicWorkPolicy.UPDATE,
+             dailyRequest
+         )
+        if (!shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
         enableEdgeToEdge()
         setContent { EuroTrackerScreen() }
     }
@@ -78,7 +123,9 @@ fun EuroTrackerScreen() {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
                 ) {
                     Text(
                         text = rate.value ?: "",
