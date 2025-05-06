@@ -70,14 +70,16 @@ fun EuroTrackerScreen() {
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
-
             if (loading.value) {
                 Text("Loading...", color = Color.Gray)
             } else if (error.value != null) {
                 Text("Error: ${error.value}", color = Color.Red)
             } else {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                ) {
                     Text(
                         text = rate.value ?: "",
                         fontSize = 48.sp,
@@ -90,32 +92,9 @@ fun EuroTrackerScreen() {
                         color = Color(0xFFFF5722),
                         fontWeight = FontWeight.Medium
                     )
+
+                    Spacer(modifier = Modifier.height(100.dp))
                 }
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .background(Color(0xFF1E1E1E))
-                        .padding(16.dp)
-                ) {
-                    // Graph placeholder
-                    Text(
-                        text = "Graph will go here",
-                        color = Color.Gray,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Text(
-                    text = "Price Change: +0.25% from last week",
-                    color = Color(0xFFFF5722),
-                    fontSize = 16.sp
-                )
             }
         }
     }
