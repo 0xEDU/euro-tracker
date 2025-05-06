@@ -105,44 +105,59 @@ fun EuroTrackerScreen() {
                 .fillMaxSize()
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
-            Text(
-                text = "Euro Tracker",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
+                Text(
+                    text = "Euro Tracker",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
 
-            if (loading.value) {
-                Text("Loading...", color = Color.Gray)
-            } else if (error.value != null) {
-                Text("Error: ${error.value}", color = Color.Red)
-            } else {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                ) {
-                    Text(
-                        text = rate.value ?: "",
-                        fontSize = 48.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Text(
-                        text = "Current Euro Price",
-                        fontSize = 18.sp,
-                        color = Color(0xFFFF5722),
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    Spacer(modifier = Modifier.height(100.dp))
+                if (loading.value) {
+                    Text("Loading...", color = Color.Gray)
+                } else if (error.value != null) {
+                    Text("Error: ${error.value}", color = Color.Red)
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                        Text(
+                            text = rate.value ?: "",
+                            fontSize = 48.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                        Text(
+                            text = "Current Euro Price",
+                            fontSize = 18.sp,
+                            color = Color(0xFFFF5722),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
+
+            Text(
+                text = "Disclaimer: This information comes from a single source and may not be precise.",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                fontWeight = FontWeight.Light,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
     }
 }
