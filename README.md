@@ -12,7 +12,7 @@ Euro Tracker is a minimal Android app that shows the current Euro-to-BRL exchang
 
 ## 📸 Screenshots
 
-<img src="screenshots/screenshot1.jpg" alt="Screenshot 1" />
+<img src="screenshots/screenshot1.jpg" alt="Screenshot 1" height="500" />
 
 ## 🚀 Getting Started
 
