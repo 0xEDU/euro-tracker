@@ -7,11 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,7 +85,7 @@ fun EuroTrackerScreen() {
             }
             val json = JSONObject(response)
             val fetchedRate = json.getJSONObject("rates").getDouble("BRL")
-            rate.value = "€ %.2f".format(fetchedRate)
+            rate.value = "1 € = R$ %.2f".format(fetchedRate)
         } catch (e: Exception) {
             error.value = e.message
         } finally {
@@ -112,14 +111,6 @@ fun EuroTrackerScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
-                Text(
-                    text = "Euro Tracker",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-
                 if (loading.value) {
                     Text("Loading...", color = Color.Gray)
                 } else if (error.value != null) {
@@ -133,14 +124,16 @@ fun EuroTrackerScreen() {
                             .fillMaxHeight()
                     ) {
                         Text(
+                            modifier = Modifier.padding(0.dp, 4.dp),
                             text = rate.value ?: "",
                             fontSize = 48.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                         Text(
-                            text = "Current Euro Price",
-                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center,
+                            text = "current euro price",
+                            fontSize = 16.sp,
                             color = Color(0xFFFF5722),
                             fontWeight = FontWeight.Medium
                         )
@@ -156,7 +149,7 @@ fun EuroTrackerScreen() {
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 fontWeight = FontWeight.Light,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                textAlign = TextAlign.Center
             )
         }
     }
