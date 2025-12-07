@@ -25,48 +25,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
-import java.time.Duration
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
-    private fun getDelayUntilNoon(): Long {
-        val now = LocalDateTime.now()
-        val noonToday = now
-            .withHour(12)
-            .withMinute(0)
-            .withSecond(0)
-            .withNano(0)
-
-        val targetTime = if (now.isBefore(noonToday)) noonToday else noonToday.plusDays(1)
-        return Duration.between(now, targetTime).toMillis()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         val dailyRequest = PeriodicWorkRequestBuilder<EuroPriceWorker>(1, TimeUnit.DAYS)
-             .setInitialDelay(getDelayUntilNoon(), TimeUnit.DAYS)
-             .build()
-
-         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
-             "EuroPriceWorker",
-             androidx.work.ExistingPeriodicWorkPolicy.UPDATE,
-             dailyRequest
-         )
-        if (!shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                0
-            )
-        }
         enableEdgeToEdge()
         setContent { EuroTrackerScreen() }
     }
