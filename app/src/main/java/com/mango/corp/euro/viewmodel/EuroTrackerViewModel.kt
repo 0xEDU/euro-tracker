@@ -40,13 +40,19 @@ class EuroTrackerViewModel : ViewModel() {
     var loading by mutableStateOf(true)
     var error by mutableStateOf<String?>(null)
 
-    init {
+    fun getExchangeRates() {
         val dataSource = retrofit.create(ExchangeRateService::class.java)
         loading = true
         viewModelScope.launch {
-            val exchangeRate = dataSource.getExchangeRate("EUR")
-            rate = "1 € = R$ %.2f".format(exchangeRate.rates["BRL"])
-            loading = false
+            try {
+                val exchangeRate = dataSource.getExchangeRate("EUR")
+                rate = "1 € = R$ %.2f".format(exchangeRate.rates["BRL"])
+                error = null
+            } catch (_: Exception) {
+                error = "Failed to load exchange rates."
+            } finally {
+                loading = false
+            }
         }
     }
 
