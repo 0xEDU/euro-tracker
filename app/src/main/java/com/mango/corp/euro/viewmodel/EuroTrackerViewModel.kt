@@ -23,7 +23,7 @@ internal data class ExchangeRateResponse(
 )
 
 internal interface ExchangeRateService {
-    @GET("latest")
+    @GET("/latest")
     suspend fun getExchangeRate(
         @Query("from") from: String,
         @Query("to") to: String = "BRL"
