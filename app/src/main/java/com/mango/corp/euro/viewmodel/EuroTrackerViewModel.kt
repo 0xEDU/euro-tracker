@@ -26,7 +26,7 @@ internal interface ExchangeRateService {
     @GET("latest")
     suspend fun getExchangeRate(
         @Query("from") from: String,
-        @Query("to") to: String
+        @Query("to") to: String = "BRL"
     ): ExchangeRateResponse
 }
 
@@ -44,7 +44,7 @@ class EuroTrackerViewModel : ViewModel() {
         val dataSource = retrofit.create(ExchangeRateService::class.java)
         loading = true
         viewModelScope.launch {
-            val exchangeRate = dataSource.getExchangeRate("EUR", "BRL")
+            val exchangeRate = dataSource.getExchangeRate("EUR")
             rate = "1 € = R$ %.2f".format(exchangeRate.rates["BRL"])
             loading = false
         }
